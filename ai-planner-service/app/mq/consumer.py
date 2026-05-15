@@ -34,6 +34,33 @@ def on_message(ch, method, properties, body):
         ch.basic_nack(delivery_tag=method.delivery_tag, requeue=True)
 
 
+MASTERY_EVALUATE_QUEUE = "mastery.evaluate.queue"
+
+
+def on_mastery_message(ch, method, properties, body):
+    """Handle mastery evaluation request"""
+    try:
+        msg = json.loads(body)
+        logger.info(f"Received mastery evaluation request: {msg}")
+        from app.agent.mastery_evaluator import evaluate_mastery
+        result = evaluate_mastery(
+            goal_id=msg["goalId"],
+            goal_name=msg.get("goalName", ""),
+            completion_rate=msg.get("completionRate", 0),
+            learning_hours=msg.get("learningHours", 0),
+            test_score=msg.get("testScore", 0),
+            phases_summary=msg.get("phasesSummary", ""),
+        )
+        # Publish result back
+        from app.mq.producer import publish_mastery_result
+        publish_mastery_result(result, msg["goalId"])
+        ch.basic_ack(delivery_tag=method.delivery_tag)
+        logger.info(f"Mastery evaluation for goal {msg['goalId']} completed")
+    except Exception as e:
+        logger.error(f"Failed to process mastery request: {e}", exc_info=True)
+        ch.basic_nack(delivery_tag=method.delivery_tag, requeue=True)
+
+
 def start_consumer():
     """Start RabbitMQ consumer"""
     credentials = pika.PlainCredentials(RABBITMQ_USER, RABBITMQ_PASS)
@@ -44,11 +71,21 @@ def start_consumer():
     )
     channel = connection.channel()
     channel.exchange_declare(exchange=AI_EXCHANGE, exchange_type="direct", durable=True)
+
+    # Goal analysis queue
     channel.queue_declare(queue=GOAL_ANALYSIS_QUEUE, durable=True)
     channel.queue_bind(
         queue=GOAL_ANALYSIS_QUEUE, exchange=AI_EXCHANGE, routing_key="goal.analysis"
     )
-    channel.basic_qos(prefetch_count=1)
     channel.basic_consume(queue=GOAL_ANALYSIS_QUEUE, on_message_callback=on_message)
-    logger.info(f"Listening for messages on queue: {GOAL_ANALYSIS_QUEUE}")
+
+    # Mastery evaluation queue
+    channel.queue_declare(queue=MASTERY_EVALUATE_QUEUE, durable=True)
+    channel.queue_bind(
+        queue=MASTERY_EVALUATE_QUEUE, exchange=AI_EXCHANGE, routing_key="mastery.evaluate"
+    )
+    channel.basic_consume(queue=MASTERY_EVALUATE_QUEUE, on_message_callback=on_mastery_message)
+
+    channel.basic_qos(prefetch_count=1)
+    logger.info(f"Listening on queues: {GOAL_ANALYSIS_QUEUE}, {MASTERY_EVALUATE_QUEUE}")
     channel.start_consuming()

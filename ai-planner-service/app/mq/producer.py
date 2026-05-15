@@ -38,3 +38,37 @@ def publish_result(result: dict):
     )
     connection.close()
     logger.info(f"Published result for goal_id={result['goal_id']}")
+
+
+def publish_mastery_result(result: dict, goal_id: int):
+    """Publish mastery evaluation result back to Java"""
+    credentials = pika.PlainCredentials(RABBITMQ_USER, RABBITMQ_PASS)
+    connection = pika.BlockingConnection(
+        pika.ConnectionParameters(
+            host=RABBITMQ_HOST, port=RABBITMQ_PORT, credentials=credentials
+        )
+    )
+    channel = connection.channel()
+    channel.exchange_declare(exchange=AI_EXCHANGE, exchange_type="direct", durable=True)
+    channel.queue_declare(queue=AI_RESULT_QUEUE, durable=True)
+    channel.queue_bind(
+        queue=AI_RESULT_QUEUE, exchange=AI_EXCHANGE, routing_key="ai.result"
+    )
+    payload = {
+        "goalId": goal_id,
+        "masteryScore": result.get("mastery_score", 0),
+        "weaknesses": result.get("weaknesses", []),
+        "suggestions": result.get("suggestions", []),
+        "shouldAdjust": result.get("should_adjust", False),
+    }
+    channel.basic_publish(
+        exchange=AI_EXCHANGE,
+        routing_key="ai.result",
+        body=json.dumps(payload, ensure_ascii=False).encode("utf-8"),
+        properties=pika.BasicProperties(
+            delivery_mode=2,
+            content_type="application/json",
+        ),
+    )
+    connection.close()
+    logger.info(f"Published mastery result for goal_id={goal_id}")

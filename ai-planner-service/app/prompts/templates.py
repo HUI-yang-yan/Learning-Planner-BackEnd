@@ -42,3 +42,20 @@ Return a list of tasks in JSON format. Each task should contain:
 
 Return ONLY a JSON array, no other content.
 Example format: [{{"task_name": "Setup Environment", "task_desc": "Install JDK and IDE", "priority": 1, "estimated_hours": 2}}]"""
+
+MASTERY_EVALUATOR_PROMPT = """You are a learning assessment expert. Evaluate the user's mastery level based on their learning data.
+
+Goal: {goal_name}
+Completion Rate: {completion_rate}%
+Learning Hours: {learning_hours}
+Test Score: {test_score}
+Phases with Tasks: {phases_summary}
+
+Return a JSON object with these fields:
+- mastery_score: Overall mastery score (0-100)
+- weaknesses: List of weak areas that need improvement
+- suggestions: List of specific learning suggestions
+- should_adjust: Boolean, whether the learning plan should be adjusted
+
+Return ONLY JSON, no other content.
+Example format: {{"mastery_score": 72, "weaknesses": ["Redis", "Microservices"], "suggestions": ["Review Redis basics", "Build a small Spring Boot project"], "should_adjust": true}}"""

@@ -86,6 +86,21 @@ def run_planner_workflow(goal_id: int, user_id: int,
     phases = result["phases"]
     publish_progress(goal_id, "COMPLETED", "Learning plan ready")
     logger.info(f"Workflow complete: {len(phases)} phases generated")
+
+    # Save to long-term memory
+    try:
+        from app.memory.user_memory import save_goal_memory
+        save_goal_memory(
+            user_id=user_id,
+            goal_id=goal_id,
+            goal_name=goal_name,
+            goal_type=analysis.get("goal_type", ""),
+            difficulty=analysis.get("difficulty", "intermediate"),
+            phases=phases,
+        )
+    except Exception as e:
+        logger.error(f"Failed to save memory: {e}")
+
     return RoadmapResult(
         goal_id=goal_id,
         goal_type=analysis.get("goal_type", ""),
