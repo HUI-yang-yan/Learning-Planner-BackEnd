@@ -23,6 +23,11 @@ spring:
         config:
           task-service:
             url: http://192.168.171.135:8083
+  data:
+    redis:
+      host: 192.168.171.135
+      port: 6379
+      password: redis123
   quartz:
     job-store-type: memory
     properties:
