@@ -1,0 +1,8 @@
+com\learningplanner\aigateway\feign\PlannerFeignClient.class
+com\learningplanner\aigateway\mq\AIProducer.class
+com\learningplanner\aigateway\mq\AIResultConsumer.class
+com\learningplanner\aigateway\AIGatewayApplication.class
+com\learningplanner\aigateway\controller\AIGatewayController.class
+com\learningplanner\aigateway\feign\PythonAIClient.class
+com\learningplanner\aigateway\service\AIGatewayService.class
+com\learningplanner\aigateway\config\RabbitMQConfig.class

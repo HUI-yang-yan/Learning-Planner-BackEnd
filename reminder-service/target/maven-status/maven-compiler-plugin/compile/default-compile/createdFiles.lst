@@ -1,0 +1,10 @@
+com\learningplanner\reminder\controller\ReminderRecordController.class
+com\learningplanner\reminder\job\TaskOverdueJob.class
+com\learningplanner\reminder\job\InactivityReminderJob.class
+com\learningplanner\reminder\config\QuartzConfig.class
+com\learningplanner\reminder\feign\TaskFeignClient.class
+com\learningplanner\reminder\ReminderServiceApplication.class
+com\learningplanner\reminder\repository\ReminderRecordMapper.class
+com\learningplanner\reminder\job\DailyReminderJob.class
+com\learningplanner\reminder\job\WeeklyReportJob.class
+com\learningplanner\reminder\service\ReminderRecordService.class

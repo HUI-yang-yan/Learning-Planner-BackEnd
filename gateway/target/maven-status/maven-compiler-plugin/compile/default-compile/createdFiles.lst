@@ -1,0 +1,4 @@
+com\learningplanner\gateway\controller\HealthController.class
+com\learningplanner\gateway\filter\JwtAuthFilter.class
+com\learningplanner\gateway\config\GatewayRoutesConfig.class
+com\learningplanner\gateway\GatewayApplication.class

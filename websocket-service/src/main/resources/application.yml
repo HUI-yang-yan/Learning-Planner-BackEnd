@@ -1,0 +1,27 @@
+server:
+  port: 8086
+
+spring:
+  application:
+    name: websocket-service
+  config:
+    import: 'optional:nacos:websocket-service.yml'
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.171.135:8848
+      config:
+        server-addr: 192.168.171.135:8848
+        file-extension: yml
+  data:
+    redis:
+      host: 192.168.171.135
+      port: 6379
+      password: redis123
+
+sa-token:
+  token-name: Authorization
+  timeout: 2592000
+  is-concurrent: true
+  token-style: uuid
+  jwt-secret-key: aiplanner-jwt-secret-key-2024

@@ -1,0 +1,4 @@
+com\learningplanner\task\TaskServiceApplication.class
+com\learningplanner\task\service\LearningTaskService.class
+com\learningplanner\task\repository\LearningTaskMapper.class
+com\learningplanner\task\controller\LearningTaskController.class

@@ -1,0 +1,9 @@
+E:\projects\Learning Planner\Learning-Planner-Backend\planner-service\src\main\java\com\learningplanner\planner\controller\LearningGoalController.java
+E:\projects\Learning Planner\Learning-Planner-Backend\planner-service\src\main\java\com\learningplanner\planner\PlannerServiceApplication.java
+E:\projects\Learning Planner\Learning-Planner-Backend\planner-service\src\main\java\com\learningplanner\planner\repository\LearningPhaseMapper.java
+E:\projects\Learning Planner\Learning-Planner-Backend\planner-service\src\main\java\com\learningplanner\planner\service\LearningGoalService.java
+E:\projects\Learning Planner\Learning-Planner-Backend\planner-service\src\main\java\com\learningplanner\planner\controller\LearningPhaseController.java
+E:\projects\Learning Planner\Learning-Planner-Backend\planner-service\src\main\java\com\learningplanner\planner\service\LearningPhaseService.java
+E:\projects\Learning Planner\Learning-Planner-Backend\planner-service\src\main\java\com\learningplanner\planner\config\RabbitMQConfig.java
+E:\projects\Learning Planner\Learning-Planner-Backend\planner-service\src\main\java\com\learningplanner\planner\mq\GoalAnalysisProducer.java
+E:\projects\Learning Planner\Learning-Planner-Backend\planner-service\src\main\java\com\learningplanner\planner\repository\LearningGoalMapper.java

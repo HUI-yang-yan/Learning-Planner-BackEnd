@@ -1,0 +1,17 @@
+E:\projects\Learning Planner\Learning-Planner-Backend\common\src\main\java\com\learningplanner\common\entity\LearningPhase.java
+E:\projects\Learning Planner\Learning-Planner-Backend\common\src\main\java\com\learningplanner\common\exception\GlobalExceptionHandler.java
+E:\projects\Learning Planner\Learning-Planner-Backend\common\src\main\java\com\learningplanner\common\config\MyBatisPlusConfig.java
+E:\projects\Learning Planner\Learning-Planner-Backend\common\src\main\java\com\learningplanner\common\dto\Result.java
+E:\projects\Learning Planner\Learning-Planner-Backend\common\src\main\java\com\learningplanner\common\dto\LoginRequest.java
+E:\projects\Learning Planner\Learning-Planner-Backend\common\src\main\java\com\learningplanner\common\dto\TaskRequest.java
+E:\projects\Learning Planner\Learning-Planner-Backend\common\src\main\java\com\learningplanner\common\dto\AIResultRequest.java
+E:\projects\Learning Planner\Learning-Planner-Backend\common\src\main\java\com\learningplanner\common\config\RedissonConfig.java
+E:\projects\Learning Planner\Learning-Planner-Backend\common\src\main\java\com\learningplanner\common\entity\LearningGoal.java
+E:\projects\Learning Planner\Learning-Planner-Backend\common\src\main\java\com\learningplanner\common\dto\RegisterRequest.java
+E:\projects\Learning Planner\Learning-Planner-Backend\common\src\main\java\com\learningplanner\common\config\MyMetaObjectHandler.java
+E:\projects\Learning Planner\Learning-Planner-Backend\common\src\main\java\com\learningplanner\common\entity\ReminderRecord.java
+E:\projects\Learning Planner\Learning-Planner-Backend\common\src\main\java\com\learningplanner\common\dto\GoalRequest.java
+E:\projects\Learning Planner\Learning-Planner-Backend\common\src\main\java\com\learningplanner\common\entity\User.java
+E:\projects\Learning Planner\Learning-Planner-Backend\common\src\main\java\com\learningplanner\common\dto\PhaseRequest.java
+E:\projects\Learning Planner\Learning-Planner-Backend\common\src\main\java\com\learningplanner\common\entity\LearningTask.java
+E:\projects\Learning Planner\Learning-Planner-Backend\common\src\main\java\com\learningplanner\common\config\RedisConfig.java

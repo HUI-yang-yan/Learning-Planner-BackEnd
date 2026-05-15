@@ -1,0 +1,33 @@
+server:
+  port: 8085
+
+spring:
+  application:
+    name: ai-gateway-service
+  config:
+    import: 'optional:nacos:ai-gateway-service.yml'
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.171.135:8848
+      config:
+        server-addr: 192.168.171.135:8848
+        file-extension: yml
+  rabbitmq:
+    host: 192.168.171.135
+    port: 5672
+    username: admin
+    password: admin123
+    virtual-host: /
+
+ai:
+  python:
+    service:
+      url: http://192.168.171.135:8000
+
+sa-token:
+  token-name: Authorization
+  timeout: 2592000
+  is-concurrent: true
+  token-style: uuid
+  jwt-secret-key: aiplanner-jwt-secret-key-2024
