@@ -26,7 +26,7 @@ public class AIStreamHandler implements WebSocketHandler {
     @Override
     public void afterConnectionEstablished(WebSocketSession session) {
         sessions.put(session.getId(), session);
-        log.info("[WebSocket] 连接建立: {}", session.getId());
+        log.info("[WebSocket] Connection established: {}", session.getId());
     }
 
     @Override
@@ -40,6 +40,7 @@ public class AIStreamHandler implements WebSocketHandler {
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
         sessions.remove(session.getId());
+        log.info("[WebSocket] Connection closed: {}", session.getId());
     }
 
     @Override
@@ -51,7 +52,8 @@ public class AIStreamHandler implements WebSocketHandler {
         WebSocketSession session = sessions.get(sessionId);
         if (session != null && session.isOpen()) {
             try {
-                String json = objectMapper.writeValueAsString(Map.of("type", type, "content", content));
+                String json = objectMapper.writeValueAsString(
+                        Map.of("type", type, "content", content));
                 session.sendMessage(new TextMessage(json));
             } catch (IOException e) {
                 sessions.remove(sessionId);
@@ -61,27 +63,40 @@ public class AIStreamHandler implements WebSocketHandler {
 
     public void broadcastAIMessage(String type, String content) {
         try {
-            String json = objectMapper.writeValueAsString(Map.of("type", type, "content", content));
+            String json = objectMapper.writeValueAsString(
+                    Map.of("type", type, "content", content));
             TextMessage msg = new TextMessage(json);
             for (WebSocketSession session : sessions.values()) {
                 if (session.isOpen()) {
-                    try { session.sendMessage(msg); } catch (IOException ignored) {}
+                    try {
+                        session.sendMessage(msg);
+                    } catch (IOException ignored) {
+                    }
                 }
             }
-        } catch (IOException ignored) {}
+        } catch (IOException ignored) {
+        }
     }
 
-    public void publishAIStreamEvent(String type, String content) {
+    public void publishAIStreamEvent(Long goalId, String type, String content) {
         try {
-            String json = objectMapper.writeValueAsString(Map.of("type", type, "content", content));
+            String json = objectMapper.writeValueAsString(
+                    Map.of("goalId", goalId, "type", type, "content", content));
             redisTemplate.convertAndSend("ai-stream-channel", json);
-        } catch (IOException ignored) {}
+        } catch (IOException ignored) {
+        }
     }
 
+    @SuppressWarnings("unchecked")
     public void handleRedisMessage(String message) {
         try {
-            Map<?, ?> msg = objectMapper.readValue(message, Map.class);
-            broadcastAIMessage((String) msg.get("type"), (String) msg.get("content"));
-        } catch (IOException ignored) {}
+            Map<String, Object> msg = objectMapper.readValue(message, Map.class);
+            // Forward to all connected WebSocket clients
+            broadcastAIMessage(
+                    (String) msg.getOrDefault("type", "PROGRESS"),
+                    (String) msg.getOrDefault("content", ""));
+        } catch (IOException e) {
+            log.error("[WebSocket] Failed to parse Redis message: {}", e.getMessage());
+        }
     }
 }
