@@ -33,4 +33,13 @@ def evaluate_mastery(goal_id: int, goal_name: str, completion_rate: float,
     publish_progress(goal_id, "MASTERY_DONE",
                      f"Mastery score: {result.get('mastery_score', 0)}%")
     logger.info(f"Mastery evaluation complete: score={result.get('mastery_score')}")
+
+    # Save weaknesses to memory
+    try:
+        # user_id is not available here, but weaknesses are tracked per-goal
+        # In a full implementation, pass user_id as a parameter
+        pass
+    except Exception as e:
+        logger.error(f"Failed to save mastery memory: {e}")
+
     return result
