@@ -25,7 +25,7 @@ public class GatewayRoutesConfig {
                         .uri("lb://task-service"))
                 // Reminder Service
                 .route("reminder-service", r -> r
-                        .path("/api/reminder/**")
+                        .path("/api/reminders/**")
                         .uri("lb://reminder-service"))
                 // AI Gateway Service
                 .route("ai-gateway-service", r -> r

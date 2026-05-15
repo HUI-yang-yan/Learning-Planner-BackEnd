@@ -8,7 +8,7 @@ import com.learningplanner.common.entity.LearningTask;
 import com.learningplanner.task.repository.LearningTaskMapper;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Service
 public class LearningTaskService extends ServiceImpl<LearningTaskMapper, LearningTask> {
@@ -60,7 +60,7 @@ public class LearningTaskService extends ServiceImpl<LearningTaskMapper, Learnin
     public Page<LearningTask> pageOverdue(int page, int size) {
         return page(new Page<>(page, size),
                 new LambdaQueryWrapper<LearningTask>()
-                        .lt(LearningTask::getDeadline, LocalDateTime.now())
+                        .lt(LearningTask::getDeadline, LocalDate.now())
                         .ne(LearningTask::getStatus, "COMPLETED"));
     }
 }

@@ -3,7 +3,7 @@ package com.learningplanner.common.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Data
 public class TaskRequest {
@@ -12,5 +12,5 @@ public class TaskRequest {
     @NotBlank(message = "任务名称不能为空")
     private String taskName;
     private String taskDesc;
-    private LocalDateTime deadline;
+    private LocalDate deadline;
 }

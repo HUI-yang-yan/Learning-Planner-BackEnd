@@ -8,7 +8,7 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/phase")
+@RequestMapping("/api/planner/phases")
 public class LearningPhaseController {
 
     private final LearningPhaseService phaseService;
