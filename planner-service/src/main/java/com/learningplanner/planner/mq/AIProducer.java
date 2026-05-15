@@ -1,6 +1,6 @@
-package com.learningplanner.aigateway.mq;
+package com.learningplanner.planner.mq;
 
-import com.learningplanner.aigateway.config.RabbitMQConfig;
+import com.learningplanner.planner.config.RabbitMQConfig;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 
@@ -15,9 +15,10 @@ public class AIProducer {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    public void sendGoalAnalysis(Long goalId, String goalName, String goalDesc) {
+    public void sendGoalAnalysis(Long goalId, Long userId, String goalName, String goalDesc) {
         rabbitTemplate.convertAndSend(RabbitMQConfig.AI_EXCHANGE, "goal.analysis",
-                Map.of("goalId", goalId, "goalName", goalName, "goalDesc", goalDesc));
+                Map.of("goalId", goalId, "userId", userId,
+                       "goalName", goalName, "goalDesc", goalDesc));
     }
 
     public void sendRoadmapGenerate(Long goalId) {

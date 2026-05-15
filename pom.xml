@@ -25,7 +25,6 @@
         <module>planner-service</module>
         <module>task-service</module>
         <module>reminder-service</module>
-        <module>ai-gateway-service</module>
         <module>websocket-service</module>
     </modules>
 

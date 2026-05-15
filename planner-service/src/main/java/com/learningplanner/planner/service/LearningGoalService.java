@@ -6,17 +6,17 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.learningplanner.common.dto.GoalRequest;
 import com.learningplanner.common.entity.LearningGoal;
-import com.learningplanner.planner.mq.GoalAnalysisProducer;
+import com.learningplanner.planner.mq.AIProducer;
 import com.learningplanner.planner.repository.LearningGoalMapper;
 import org.springframework.stereotype.Service;
 
 @Service
 public class LearningGoalService extends ServiceImpl<LearningGoalMapper, LearningGoal> {
 
-    private final GoalAnalysisProducer goalAnalysisProducer;
+    private final AIProducer aiProducer;
 
-    public LearningGoalService(GoalAnalysisProducer goalAnalysisProducer) {
-        this.goalAnalysisProducer = goalAnalysisProducer;
+    public LearningGoalService(AIProducer aiProducer) {
+        this.aiProducer = aiProducer;
     }
 
     public LearningGoal create(GoalRequest request) {
@@ -28,7 +28,7 @@ public class LearningGoalService extends ServiceImpl<LearningGoalMapper, Learnin
         goal.setEstimatedDuration(request.getEstimatedDuration());
         goal.setStatus("ANALYZING");
         save(goal);
-        goalAnalysisProducer.sendGoalAnalysis(goal.getId(), userId,
+        aiProducer.sendGoalAnalysis(goal.getId(), userId,
                 request.getGoalName(), request.getGoalDesc());
         return goal;
     }

@@ -27,10 +27,6 @@ public class GatewayRoutesConfig {
                 .route("reminder-service", r -> r
                         .path("/api/reminders/**")
                         .uri("lb://reminder-service"))
-                // AI Gateway Service
-                .route("ai-gateway-service", r -> r
-                        .path("/api/ai/**")
-                        .uri("lb://ai-gateway-service"))
                 // WebSocket Service
                 .route("websocket-service", r -> r
                         .path("/ws/**")

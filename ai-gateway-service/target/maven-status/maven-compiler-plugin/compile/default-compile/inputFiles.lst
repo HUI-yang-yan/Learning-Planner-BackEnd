@@ -1,8 +1,0 @@
-E:\projects\Learning Planner\Learning-Planner-Backend\ai-gateway-service\src\main\java\com\learningplanner\aigateway\config\RabbitMQConfig.java
-E:\projects\Learning Planner\Learning-Planner-Backend\ai-gateway-service\src\main\java\com\learningplanner\aigateway\service\AIGatewayService.java
-E:\projects\Learning Planner\Learning-Planner-Backend\ai-gateway-service\src\main\java\com\learningplanner\aigateway\AIGatewayApplication.java
-E:\projects\Learning Planner\Learning-Planner-Backend\ai-gateway-service\src\main\java\com\learningplanner\aigateway\controller\AIGatewayController.java
-E:\projects\Learning Planner\Learning-Planner-Backend\ai-gateway-service\src\main\java\com\learningplanner\aigateway\feign\PlannerFeignClient.java
-E:\projects\Learning Planner\Learning-Planner-Backend\ai-gateway-service\src\main\java\com\learningplanner\aigateway\mq\AIProducer.java
-E:\projects\Learning Planner\Learning-Planner-Backend\ai-gateway-service\src\main\java\com\learningplanner\aigateway\feign\PythonAIClient.java
-E:\projects\Learning Planner\Learning-Planner-Backend\ai-gateway-service\src\main\java\com\learningplanner\aigateway\mq\AIResultConsumer.java

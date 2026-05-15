@@ -5,10 +5,8 @@ import com.learningplanner.common.dto.GoalRequest;
 import com.learningplanner.common.dto.Result;
 import com.learningplanner.common.entity.LearningGoal;
 import com.learningplanner.common.entity.LearningPhase;
-import com.learningplanner.common.entity.LearningTask;
 import com.learningplanner.planner.service.LearningGoalService;
 import com.learningplanner.planner.service.LearningPhaseService;
-import com.learningplanner.planner.service.LearningTaskService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,14 +16,11 @@ public class LearningGoalController {
 
     private final LearningGoalService goalService;
     private final LearningPhaseService phaseService;
-    private final LearningTaskService taskService;
 
     public LearningGoalController(LearningGoalService goalService,
-                                   LearningPhaseService phaseService,
-                                   LearningTaskService taskService) {
+                                   LearningPhaseService phaseService) {
         this.goalService = goalService;
         this.phaseService = phaseService;
-        this.taskService = taskService;
     }
 
     @PostMapping
@@ -85,17 +80,7 @@ public class LearningGoalController {
                 phase.setStatus("PENDING");
                 phaseService.save(phase);
 
-                if (phaseDTO.getTasks() != null) {
-                    for (var taskDTO : phaseDTO.getTasks()) {
-                        LearningTask task = new LearningTask();
-                        task.setPhaseId(phase.getId());
-                        task.setTaskName(taskDTO.getTaskName());
-                        task.setTaskDesc(taskDTO.getTaskDesc());
-                        task.setPriority(taskDTO.getPriority());
-                        task.setStatus("PENDING");
-                        taskService.save(task);
-                    }
-                }
+                // Tasks are created via task-service separately
             }
         }
         goal.setStatus("ACTIVE");
