@@ -2,6 +2,7 @@ package com.learningplanner.planner.controller;
 
 import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.learningplanner.common.dto.Result;
 import com.learningplanner.common.entity.ChatMessage;
 import com.learningplanner.planner.repository.ChatMessageMapper;
@@ -20,6 +21,8 @@ import java.util.concurrent.TimeUnit;
 @RequestMapping("/api/planner/chat")
 public class ChatHistoryController {
 
+    private static final int PAGE_SIZE = 20;
+
     private final ChatMessageMapper chatMessageMapper;
     private final RedisTemplate<String, Object> redisTemplate;
 
@@ -35,29 +38,35 @@ public class ChatHistoryController {
             @Parameter(description = "会话 ID") @RequestParam String conversationId,
             @Parameter(description = "偏移量") @RequestParam(defaultValue = "0") int offset) {
         Long userId = StpUtil.getLoginIdAsLong();
-        String cacheKey = "chat:history:" + userId + ":" + conversationId + ":" + (offset / 20);
+        int pageNum = (offset / PAGE_SIZE) + 1;
+        String cacheKey = "chat:history:" + userId + ":" + conversationId + ":" + (offset / PAGE_SIZE);
 
         // 尝试从 Redis 缓存读取
         Object cached = redisTemplate.opsForValue().get(cacheKey);
         if (cached instanceof List) {
             @SuppressWarnings("unchecked")
             List<ChatMessage> list = (List<ChatMessage>) cached;
-            return Result.ok(Map.of("items", list, "hasMore", list.size() == 20, "nextOffset", offset + list.size()));
+            return Result.ok(Map.of(
+                    "items", list,
+                    "hasMore", list.size() == PAGE_SIZE,
+                    "nextOffset", offset + list.size()));
         }
 
-        // 缓存未命中，查 MySQL
-        List<ChatMessage> messages = chatMessageMapper.selectList(
+        // 缓存未命中，查 MySQL（使用 MyBatis-Plus Page）
+        Page<ChatMessage> page = chatMessageMapper.selectPage(
+                new Page<>(pageNum, PAGE_SIZE),
                 new LambdaQueryWrapper<ChatMessage>()
                         .eq(ChatMessage::getConversationId, conversationId)
-                        .orderByAsc(ChatMessage::getId)
-                        .last("LIMIT 20 OFFSET " + offset));
+                        .orderByAsc(ChatMessage::getId));
+
+        List<ChatMessage> messages = page.getRecords();
 
         // 写入 Redis 缓存（10 分钟过期）
         redisTemplate.opsForValue().set(cacheKey, messages, 10, TimeUnit.MINUTES);
 
         return Result.ok(Map.of(
                 "items", messages,
-                "hasMore", messages.size() == 20,
+                "hasMore", page.getCurrent() < page.getPages(),
                 "nextOffset", offset + messages.size()));
     }
 }
