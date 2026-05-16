@@ -38,3 +38,24 @@ class RoadmapResult(BaseModel):
     estimated_duration: str
     required_skills: list[str]
     phases: list[PhaseItem]
+
+
+class ChatRequest(BaseModel):
+    message: str
+    conversation_id: str | None = None
+
+
+class ToolCallEvent(BaseModel):
+    type: str = "tool_call"
+    tool: str
+    args: dict
+
+
+class TokenEvent(BaseModel):
+    type: str = "token"
+    content: str
+
+
+class DoneEvent(BaseModel):
+    type: str = "done"
+    conversation_id: str
