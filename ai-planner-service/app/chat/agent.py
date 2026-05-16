@@ -37,6 +37,11 @@ async def run_chat_agent(user_id: int, user_message: str,
     if not conversation_id:
         conversation_id = str(uuid.uuid4())
 
+    try:
+        from app.mq.producer import publish_chat_message
+    except ImportError:
+        publish_chat_message = None
+
     llm = ChatOpenAI(model=CHAT_MODEL, temperature=0.7, streaming=True)
     llm_with_tools = llm.bind_tools(TOOLS)
 
@@ -64,6 +69,11 @@ async def run_chat_agent(user_id: int, user_message: str,
 
     # 保存用户消息
     save_message(user_id, conversation_id, "user", user_message)
+    if publish_chat_message:
+        try:
+            publish_chat_message(user_id, conversation_id, "user", user_message)
+        except Exception as e:
+            logger.error(f"Failed to publish chat message: {e}")
 
     full_response = ""
 
@@ -117,6 +127,11 @@ async def run_chat_agent(user_id: int, user_message: str,
     # 保存助手回复
     if full_response:
         save_message(user_id, conversation_id, "assistant", full_response)
+        if publish_chat_message:
+            try:
+                publish_chat_message(user_id, conversation_id, "assistant", full_response)
+            except Exception as e:
+                logger.error(f"Failed to publish chat message: {e}")
 
     # 通知完成
     yield {"type": "done", "conversation_id": conversation_id}
