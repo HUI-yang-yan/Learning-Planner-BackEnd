@@ -14,6 +14,7 @@ public class RabbitMQConfig {
     public static final String TASK_GENERATE_QUEUE = "task.generate.queue";
     public static final String MASTERY_EVALUATE_QUEUE = "mastery.evaluate.queue";
     public static final String AI_RESULT_QUEUE = "ai.result.queue";
+    public static final String CHAT_MESSAGE_QUEUE = "chat.message.queue";
     public static final String AI_EXCHANGE = "ai.exchange";
 
     @Bean
@@ -26,6 +27,8 @@ public class RabbitMQConfig {
     public Queue masteryEvaluateQueue() { return QueueBuilder.durable(MASTERY_EVALUATE_QUEUE).build(); }
     @Bean
     public Queue aiResultQueue() { return QueueBuilder.durable(AI_RESULT_QUEUE).build(); }
+    @Bean
+    public Queue chatMessageQueue() { return QueueBuilder.durable(CHAT_MESSAGE_QUEUE).build(); }
 
     @Bean
     public DirectExchange aiExchange() { return new DirectExchange(AI_EXCHANGE); }
@@ -40,6 +43,8 @@ public class RabbitMQConfig {
     public Binding masteryEvaluateBinding() { return BindingBuilder.bind(masteryEvaluateQueue()).to(aiExchange()).with("mastery.evaluate"); }
     @Bean
     public Binding aiResultBinding() { return BindingBuilder.bind(aiResultQueue()).to(aiExchange()).with("ai.result"); }
+    @Bean
+    public Binding chatMessageBinding() { return BindingBuilder.bind(chatMessageQueue()).to(aiExchange()).with("chat.message"); }
 
     @Bean
     public MessageConverter messageConverter() { return new Jackson2JsonMessageConverter(); }
