@@ -33,15 +33,7 @@ public class GatewayRoutesConfig {
                 // Planner Service
                 .route("planner-service", r -> r
                         .path("/api/planner/**")
-                        .filters(f -> f.filter((exchange, chain) -> {
-                            log.info("[Gateway] Routing to planner-service: {} {}",
-                                    exchange.getRequest().getMethod(),
-                                    exchange.getRequest().getURI().getPath());
-                            return chain.filter(exchange).doOnSuccess(v ->
-                                log.info("[Gateway] planner-service response: status={}",
-                                        exchange.getResponse().getStatusCode()));
-                        }))
-                        .uri("lb://planner-service"))
+                        .uri("http://10.162.35.46:8082"))
                 // Task Service
                 .route("task-service", r -> r
                         .path("/api/task/**")
