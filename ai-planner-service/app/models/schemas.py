@@ -1,29 +1,35 @@
 from pydantic import BaseModel, Field
+from pydantic.alias_generators import to_camel
 from typing import Optional
 
 
-class GoalAnalysisRequest(BaseModel):
+class CamelModel(BaseModel):
+    """自动将 snake_case 字段名序列化为 camelCase，兼容 Java 侧"""
+    model_config = {"alias_generator": to_camel, "populate_by_name": True}
+
+
+class GoalAnalysisRequest(CamelModel):
     goal_id: int
     user_id: int
     goal_name: str
     goal_desc: str = ""
 
 
-class GoalAnalysis(BaseModel):
+class GoalAnalysis(CamelModel):
     goal_type: str
     difficulty: str
     estimated_duration: str
     required_skills: list[str]
 
 
-class TaskItem(BaseModel):
+class TaskItem(CamelModel):
     task_name: str
     task_desc: str
     priority: int = 1
     estimated_hours: int = 1
 
 
-class PhaseItem(BaseModel):
+class PhaseItem(CamelModel):
     phase_name: str
     phase_order: int
     phase_desc: str
@@ -31,7 +37,7 @@ class PhaseItem(BaseModel):
     tasks: list[TaskItem]
 
 
-class RoadmapResult(BaseModel):
+class RoadmapResult(CamelModel):
     goal_id: int
     goal_type: str
     difficulty: str
@@ -40,22 +46,22 @@ class RoadmapResult(BaseModel):
     phases: list[PhaseItem]
 
 
-class ChatRequest(BaseModel):
+class ChatRequest(CamelModel):
     message: str
     conversation_id: str | None = None
 
 
-class ToolCallEvent(BaseModel):
+class ToolCallEvent(CamelModel):
     type: str = "tool_call"
     tool: str
     args: dict
 
 
-class TokenEvent(BaseModel):
+class TokenEvent(CamelModel):
     type: str = "token"
     content: str
 
 
-class DoneEvent(BaseModel):
+class DoneEvent(CamelModel):
     type: str = "done"
     conversation_id: str

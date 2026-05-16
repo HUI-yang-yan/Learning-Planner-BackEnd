@@ -37,7 +37,7 @@ def publish_result(result: dict):
         ),
     )
     connection.close()
-    logger.info(f"Published result for goal_id={result['goal_id']}")
+    logger.info(f"Published result for goalId={result.get('goalId', 'unknown')}")
 
 
 def publish_mastery_result(result: dict, goal_id: int):

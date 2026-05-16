@@ -26,7 +26,7 @@ def on_message(ch, method, properties, body):
             goal_name=msg["goalName"],
             goal_desc=msg.get("goalDesc", ""),
         )
-        publish_result(result.model_dump())
+        publish_result(result.model_dump(by_alias=True))
         ch.basic_ack(delivery_tag=method.delivery_tag)
         logger.info(f"Goal {msg['goalId']} processed successfully")
     except Exception as e:
