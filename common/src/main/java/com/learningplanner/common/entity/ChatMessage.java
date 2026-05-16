@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 @Data
 @TableName("chat_message")
-public class ChatMessage {
+public class ChatMessage implements java.io.Serializable {
     @TableId(type = IdType.AUTO)
     private Long id;
     private Long userId;
