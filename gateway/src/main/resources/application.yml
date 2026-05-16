@@ -17,9 +17,18 @@ spring:
     gateway:
       discovery:
         locator:
-          enabled: true
-          lower-case-service-id: true
+          enabled: false
+      httpclient:
+        response-timeout: 60s
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowed-origins: "*"
+            allowed-methods: "*"
+            allowed-headers: "*"
+            max-age: 3600
     sentinel:
+      enabled: false
       transport:
         dashboard: 192.168.171.135:8858
       eager: true
