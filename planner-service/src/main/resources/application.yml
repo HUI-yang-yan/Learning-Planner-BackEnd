@@ -8,7 +8,7 @@ spring:
     import: 'optional:nacos:planner-service.yml'
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.171.135:3306/ai_platform?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://192.168.171.135:3306/learning_planner?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
     username: root
     password: '123456'
   cloud:
@@ -28,6 +28,8 @@ spring:
     port: 5672
     username: admin
     password: admin123
+    publisher-confirm-type: correlated
+    publisher-returns: true
 
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**/*.xml
