@@ -73,6 +73,7 @@ async def run_chat_agent(user_id: int, user_message: str,
 
         # 检查是否需要调用工具
         if response.tool_calls:
+            messages.append(response)
             for tool_call in response.tool_calls:
                 tool_name = tool_call["name"]
                 tool_args = tool_call["args"]
@@ -93,7 +94,6 @@ async def run_chat_agent(user_id: int, user_message: str,
                         args = {**tool_args, "auth_header": auth_header}
                     tool_result = await tool_func.ainvoke(args)
 
-                    messages.append(response)
                     messages.append(ToolMessage(content=tool_result, tool_call_id=tool_call["id"]))
 
             # 第二轮：基于工具结果生成回复
@@ -104,9 +104,11 @@ async def run_chat_agent(user_id: int, user_message: str,
                     yield {"type": "token", "content": chunk.content}
         else:
             # 无工具调用，流式返回
-            if response.content:
-                full_response = response.content
-                yield {"type": "token", "content": response.content}
+            stream_llm = ChatOpenAI(model=CHAT_MODEL, temperature=0.7, streaming=True)
+            async for chunk in stream_llm.astream(messages):
+                if chunk.content:
+                    full_response += chunk.content
+                    yield {"type": "token", "content": chunk.content}
 
     except Exception as e:
         logger.error(f"Chat agent error: {e}", exc_info=True)
