@@ -22,14 +22,23 @@ public class ChatMessageConsumer {
     @SuppressWarnings("unchecked")
     @RabbitListener(queues = RabbitMQConfig.CHAT_MESSAGE_QUEUE)
     public void handleChatMessage(Map<String, Object> msg) {
-        log.info("[Chat] Saving message: convId={}, role={}",
-                msg.get("conversationId"), msg.get("role"));
+        Object userIdObj = msg.get("userId");
+        String conversationId = (String) msg.get("conversationId");
+        String role = (String) msg.get("role");
+        String content = (String) msg.get("content");
+
+        if (userIdObj == null || conversationId == null || role == null || content == null) {
+            log.warn("[Chat] Skipping malformed message: {}", msg);
+            return;
+        }
+
+        log.info("[Chat] Saving message: convId={}, role={}", conversationId, role);
         try {
             ChatMessage entity = new ChatMessage();
-            entity.setUserId(Long.valueOf(msg.get("userId").toString()));
-            entity.setConversationId((String) msg.get("conversationId"));
-            entity.setRole((String) msg.get("role"));
-            entity.setContent((String) msg.get("content"));
+            entity.setUserId(Long.valueOf(userIdObj.toString()));
+            entity.setConversationId(conversationId);
+            entity.setRole(role);
+            entity.setContent(content);
             chatMessageMapper.insert(entity);
         } catch (Exception e) {
             log.error("[Chat] Failed to save message", e);
