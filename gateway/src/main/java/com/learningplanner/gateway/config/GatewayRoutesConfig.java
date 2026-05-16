@@ -33,18 +33,6 @@ public class GatewayRoutesConfig {
                 // Planner Service
                 .route("planner-service", r -> r
                         .path("/api/planner/**")
-                        .filters(f -> f.filter((exchange, chain) -> {
-                            // 从 attributes 读取 X-User-Id 加到 header，传给下游
-                            String userId = exchange.getAttribute("X-User-Id");
-                            if (userId != null) {
-                                return chain.filter(exchange.mutate()
-                                    .request(exchange.getRequest().mutate()
-                                        .header("X-User-Id", userId)
-                                        .build())
-                                    .build());
-                            }
-                            return chain.filter(exchange);
-                        }))
                         .uri("lb://planner-service"))
                 // Task Service
                 .route("task-service", r -> r
