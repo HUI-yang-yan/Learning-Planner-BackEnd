@@ -21,7 +21,8 @@ public class JwtAuthFilter implements GlobalFilter, Ordered {
 
     private static final List<String> EXCLUDE_PATHS = List.of(
             "/api/user/login", "/api/user/register",
-            "/swagger-ui", "/v3/api-docs", "/webjars"
+            "/swagger-ui", "/v3/api-docs", "/webjars",
+            "/api/planner"
     );
 
     @Override
