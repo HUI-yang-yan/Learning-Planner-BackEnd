@@ -7,7 +7,6 @@ import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
@@ -22,8 +21,7 @@ public class JwtAuthFilter implements GlobalFilter, Ordered {
 
     private static final List<String> EXCLUDE_PATHS = List.of(
             "/api/user/login", "/api/user/register",
-            "/swagger-ui", "/v3/api-docs", "/webjars",
-            "/api/planner/goals"
+            "/swagger-ui", "/v3/api-docs", "/webjars"
     );
 
     @Override
@@ -58,13 +56,8 @@ public class JwtAuthFilter implements GlobalFilter, Ordered {
                 .subscribeOn(Schedulers.boundedElastic())
                 .flatMap(loginId -> {
                     if (loginId != null) {
-                        ServerHttpRequest mutatedRequest = exchange.getRequest().mutate()
-                                .header("X-User-Id", String.valueOf(loginId))
-                                .build();
-                        ServerWebExchange mutatedExchange = exchange.mutate()
-                                .request(mutatedRequest)
-                                .build();
-                        return chain.filter(mutatedExchange);
+                        exchange.getAttributes().put("X-User-Id", String.valueOf(loginId));
+                        return chain.filter(exchange);
                     }
                     log.debug("Token not found in Redis: {}", finalToken);
                     exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
