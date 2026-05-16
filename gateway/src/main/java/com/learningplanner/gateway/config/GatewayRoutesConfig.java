@@ -15,6 +15,10 @@ public class GatewayRoutesConfig {
                 .route("user-service", r -> r
                         .path("/api/user/**")
                         .uri("lb://user-service"))
+                // AI Planner Chat Service（必须在 planner-service 之前，更具体的路由优先匹配）
+                .route("ai-planner-chat", r -> r
+                        .path("/api/planner/ai/chat")
+                        .uri("lb://ai-planner-service"))
                 // Planner Service
                 .route("planner-service", r -> r
                         .path("/api/planner/**")
